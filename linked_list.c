@@ -11,33 +11,62 @@ typedef struct{
 	listNode* head;
 }linkedList_h;
 
+linkedList_h * createLinkedList_h(void);
+void insertLastNode(linkedList_h* L, char* data);
+void deleteNode(linkedList_h* L, listNode* p);
+void printList(linkedList_h * L);
+void deleteFirstNode(linkedList_h* L);
+listNode * searchNode(linkedList_h* L, char* data);
+
+int main(){
+
+    linkedList_h* L;
+	L=createLinkedList_h();
+	listNode* p = NULL;
+
+    int play = 1;
+    while(play){
+        printf("메뉴를 선택하세요\n 1. 삽입  2. 삭제  3. 출력  4. 종료\n");
+        int menu;
+        scanf("%d", &menu);
+        if(menu == 1){
+            printf("마지막 노드에 추가할 데이터를 입력하세요 : ");
+            char data[20] = {'\0', };
+            scanf("%s", data);
+            insertLastNode(L, data);
+        }else if(menu == 2){
+            printf("메뉴를 선택하세요\n 1. 첫번째 노드 삭제  2. 선택삭제\n");
+            int deletemenu;
+            scanf("%d", &deletemenu);
+            if(deletemenu == 1){
+                deleteFirstNode(L);
+            }else if(deletemenu == 2){
+                printf("삭제할 데이터를 입력하세요 : ");
+                char data[20] = {'\0', };
+                scanf("%s", data);
+                p = searchNode(L, data);
+                deleteNode(L, p);
+            }else{
+                 printf("메뉴를 잘못선택하여 메인으로 돌아갑니다.\n\n");
+            }
+        }else if(menu == 3){
+            printf("리스트 데이터 출력\n");
+            printList(L);
+        }else if(menu == 4){
+            printf("프로그램을 종료합니다\n\n");
+            play = 0;
+        }else{
+            printf("메뉴 선택을 다시해주세요\n\n");
+        }
+    }
+}
+
 linkedList_h * createLinkedList_h(void)
 {
 	linkedList_h* L;
 	L = (linkedList_h*)malloc(sizeof(linkedList_h));
 	L -> head = NULL;
 	return L;
-}
-
-void insertFirstNode(linkedList_h* L, char* data)
- 
-{
-	listNode* node1;
-	node1 = (listNode*)malloc(sizeof(listNode));
-	strcpy(node1 -> data, data);
-
-	if(L -> head == NULL)
-	{	
-		node1 -> link = NULL;
-		L -> head = node1;
-	}
-		
-	else
-	{
-		node1 -> link  = L-> head;
-		L->head = node1;
-	}
-		
 }
 
 void insertLastNode(linkedList_h* L, char* data)
@@ -57,64 +86,6 @@ void insertLastNode(linkedList_h* L, char* data)
 	node1->link = NULL;
 	p->link = node1;
 }
-
-listNode * searchNode(linkedList_h* L, char* data)
-{
-	listNode* p;
-	p = L -> head;
-
-	if(L-> head == NULL)
-	{
-		printf("empty");
-	}
-
-	else
-	{	while(1)
-		{
-			if(strcmp(p->data ,data) == 0)
-			{
-				return p;
-				break;
-				free(p);
-			}
-
-			else
-				 return p->link;
-		}
-
-	}
-}
-
-void insertMiddleNode(linkedList_h* L, listNode* p, char* data)
-{ 
-	listNode* node1;
-	node1 = (listNode*)malloc(sizeof(listNode));
-	strcpy(node1 -> data, data);
-
-	node1 -> link = p->link;
-	p->link = node1;
-
-	
-}
-
-linkedList_h* reverse(linkedList_h* L)
-{
-        linkedList_h* R;
-        R = (linkedList_h*)malloc(sizeof(linkedList_h));
-        R -> head = NULL;
-	
-	listNode* p;
-        p = L -> head;
-
-
-	//while
-	
-
-	
-        return R;
-
-}
-
 
 
 void deleteNode(linkedList_h* L, listNode* p)
@@ -155,6 +126,26 @@ void deleteNode(linkedList_h* L, listNode* p)
 	}
 }
 
+void printList(linkedList_h * L) {
+
+	if(L->head==NULL)
+	{
+		printf("empty\n");
+	}
+	else
+	{
+		listNode* p;
+        	p = L -> head;
+
+		while(p->link != NULL) {
+			printf("%s ", p->data);
+			p = p->link;
+		}
+
+		printf("%s\n", p->data);}
+
+}
+
 void deleteFirstNode(linkedList_h* L)
 {
 	listNode* p;
@@ -176,138 +167,29 @@ void deleteFirstNode(linkedList_h* L)
 
 }
 
-void deleteLastNode(linkedList_h* L)
-{	
+listNode * searchNode(linkedList_h* L, char* data)
+{
+	listNode* p;
+	p = L -> head;
 
-	if(L->head==NULL)
-        {
-                printf("empty\n");
-        }
+	if(L-> head == NULL)
+	{
+		printf("empty");
+	}
 
-        else
-        {
-                listNode* p;
-                p = L->head;
-
-
-		while(1)
+	else
+	{	while(1)
 		{
-			if(p-> link-> link == NULL) 
+			if(strcmp(p->data ,data) == 0)
 			{
-                        	p->link = NULL;
-				free(p->link);
+				return p;
 				break;
+				free(p);
 			}
 
-			p = p->link;
-                }		               
-		
-		
-        }
-
-}
-
-
-void printList(linkedList_h * L) {
-
-	if(L->head==NULL)
-	{
-		printf("empty\n");
-	}
-	else
-	{
-		listNode* p;
-        	p = L -> head;
-
-		while(p->link != NULL) {
-			printf("%s ", p->data);
-			p = p->link;
+			else
+				 return p->link;
 		}
 
-		printf("%s\n", p->data);}
-
-}
-
-void freeLinkedList_h(linkedList_h * L) {
-	listNode* p;
-	while(L -> head != NULL) {
-		p = L -> head;
-		L -> head = L -> head -> link;
-		free(p);
-		p = NULL;
 	}
-}
-
-int main() {
-	
-	linkedList_h* L;
-	L=createLinkedList_h();
-	listNode* p;
-	
-	
-
-	printf("[create]\n");	
-	printList(L);
-	printf("\n");
-
-	printf("[insert]\n");
-	insertFirstNode(L, "apple");	
-	printList(L);
-	printf("\n");
-
-	printf("[last insert]\n");
-	insertLastNode(L, "banana");
-
-	printList(L);
-	printf("\n");
-
-	printf("[last insert]\n");
-	insertLastNode(L, "grape");
-
-	printList(L);
-	printf("\n");
-
-	printf("[banana search]\n");
-	p = searchNode(L,"banana");
-	
-	if(p == NULL) { printf("data NULL"); }
-	else { printf("%s search\n", p->data); }
-	
-	printf("\n");
-	searchNode(L, "banana");
-
-	printf("[banana next orange input]\n");
-	insertMiddleNode(L,p,"orange");
-	printList(L);
-
-	printf("\n");
-	printf("[reverse]\n");
-	reverse(L);
-	printList(L);	
-
-	printf("\n");
-	printf("[banana delete]\n");
-	p = searchNode(L, "banana");
-
-	deleteNode(L,p);
-	printList(L);
-	printf("\n");
-
-	printf("[FirstNode delete]\n");
-	deleteFirstNode(L);
-	printList(L);
-	printf("\n");
-
-	printf("[LastNode delete]\n");
-	deleteLastNode(L);
-	printList(L);
-	printf("\n");
-	
-
-	printf("[end]\n");
-	freeLinkedList_h(L);
-
-	printList(L);
-
-	return 0;
 }
